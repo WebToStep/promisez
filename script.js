@@ -9,10 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
             request.open('GET', url);
             request.setRequestHeader('Content-type', 'application/json');
             request.addEventListener('readystatechange', () => {
+                if (request.readyState !== 4) return;
                 if (request.readyState === 4 && request.status === 200) {
                     const data = JSON.parse(request.responseText);
-                    // console.log('data: ', data);
-                    // Здесь выводится data
                     resolve(data);
                 } else {
                     reject('Произошла ошибка');
@@ -23,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     const outputCar = (data) => {
-        console.log(data);
         data.cars.forEach(item => {
             if (item.brand === select.value) {
                 const {brand, model, price} = item;
@@ -35,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     select.addEventListener('change', () => {
         getData('./cars.json')
-        // тут then не запускает функцию почемуто а сама data undefined
         .then(outputCar)
         .catch(err => output.innerHTML = err)
     });
